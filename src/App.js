@@ -5,6 +5,7 @@ import Header from './components/Layout/Header';
 const App = () => (
   <>
     <Header />
+    <div className="container"> Content</div>
     <Footer />
   </>
 );
