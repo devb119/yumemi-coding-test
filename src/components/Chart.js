@@ -10,86 +10,94 @@ import {
   Line,
   ResponsiveContainer,
 } from 'recharts';
-import { getPrefectures } from '../commons/apis/services';
+import { getPrefectures, getPopulations } from '../commons/apis/services';
 import { useAsync } from '../commons/hooks/useAsync';
 import Spinner from './Spinner';
+import { genRandomColors } from '../commons/utils';
 import './style.css';
+
+const randomColors = genRandomColors();
 
 const Chart = () => {
   //   const [selecedPrefectures, setSelectedPrefectures] = React.useState([]);
-  const { data: prefData, isIdle, isLoading, run } = useAsync();
-  // const { data: populationData, isIdle: pIsIdle, pIsLoading, run: pRun } = useAsync();
+  const { data: prefData, isIdle, isLoading, isSuccess, run } = useAsync();
+  const [pop, setPop] = React.useState([]);
+  const [selectedPrefs, setSelectedPrefs] = React.useState([]);
 
   React.useEffect(() => {
     run(getPrefectures());
   }, [run]);
 
-  console.log(prefData);
+  React.useEffect(() => {
+    if (isSuccess) {
+      const popArr = prefData.map((pref) => getPopulations(pref.prefCode));
+      Promise.all(popArr).then((d) => {
+        // Get total population data
+        const data = d.map((p) => p.data[0].data);
+        setPop(data);
+      });
+    }
+  }, [isSuccess]);
 
-  const mockData = [
-    {
-      name: 'Page A',
-      uv: 4000,
-      pv: 2400,
-      amt: 2400,
-    },
-    {
-      name: 'Page B',
-      uv: 3000,
-      pv: 1398,
-      amt: 2210,
-    },
-    {
-      name: 'Page C',
-      uv: 2000,
-      pv: 9800,
-      amt: 2290,
-    },
-    {
-      name: 'Page D',
-      uv: 2780,
-      pv: 3908,
-      amt: 2000,
-    },
-    {
-      name: 'Page E',
-      uv: 1890,
-      pv: 4800,
-      amt: 2181,
-    },
-    {
-      name: 'Page F',
-      uv: 2390,
-      pv: 3800,
-      amt: 2500,
-    },
-    {
-      name: 'Page G',
-      uv: 3490,
-      pv: 4300,
-      amt: 2100,
-    },
-  ];
+  let chartData;
+
+  if (pop.length && prefData) {
+    chartData = pop[0].map((year, i) => {
+      const oneYearData = {
+        year: year.year,
+      };
+
+      // pop[j] is the population of the pref at year i
+      prefData.forEach((pref, j) => {
+        oneYearData[pref.prefName] = pop[j][i].value;
+      });
+
+      return oneYearData;
+    });
+  }
+
+  const handleLegendClick = (e) => {
+    const key = e.dataKey.trim();
+    const selectedPrefsCopy = [...selectedPrefs];
+    // Remove if already exists in the array (toggle)
+    if (selectedPrefsCopy.includes(key)) {
+      const index = selectedPrefsCopy.indexOf(key);
+      selectedPrefsCopy.splice(index, 1);
+      // Else push to array
+    } else selectedPrefsCopy.push(key);
+    setSelectedPrefs(selectedPrefsCopy);
+  };
 
   return (
     <div className="chart-container">
-      {isIdle || isLoading ? (
+      {isIdle || isLoading || !pop || !chartData ? (
         <Spinner />
       ) : (
-        <ResponsiveContainer width="100%" height={400}>
-          <LineChart
-            data={mockData}
-            margin={{ top: 5, right: 30, left: 20, bottom: 5 }}
-          >
-            <CartesianGrid strokeDasharray="3 3" />
-            <XAxis dataKey="name" />
-            <YAxis />
-            <Tooltip />
-            <Legend onClick={(e) => console.log(e)} />
-            <Line strokeWidth={2} type="linear" dataKey="pv" stroke="#8884d8" />
-            <Line strokeWidth={2} type="linear" dataKey="uv" stroke="#82ca9d" />
-          </LineChart>
-        </ResponsiveContainer>
+        <>
+          <div className="guide">Click the legend to toggle data lines!</div>
+          <ResponsiveContainer width="100%" height={600}>
+            <LineChart data={chartData}>
+              <CartesianGrid strokeDasharray="3 3" />
+              <XAxis dataKey="year" />
+              <YAxis />
+              <Tooltip />
+              <Legend onClick={handleLegendClick} />
+              {prefData.map((pref, i) => (
+                <Line
+                  strokeWidth={2}
+                  key={pref.prefCode}
+                  type="linear"
+                  dataKey={
+                    selectedPrefs.includes(pref.prefName)
+                      ? pref.prefName
+                      : `${pref.prefName} `
+                  }
+                  stroke={randomColors[i]}
+                />
+              ))}
+            </LineChart>
+          </ResponsiveContainer>
+        </>
       )}
     </div>
   );

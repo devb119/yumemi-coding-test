@@ -20,4 +20,24 @@ async function getPrefectures(customConfig) {
   );
 }
 
-export { getPrefectures };
+async function getPopulations(prefCode, customConfig) {
+  const config = {
+    method: 'GET',
+    headers: {
+      'X-API-KEY': RESAS_API_KEY,
+      //   'Content-Type': 'application/json;charset=UTF-8',
+    },
+    ...customConfig,
+  };
+
+  return fetch(
+    `${RESAS_API_END_POINT}/api/v1/population/composition/perYear?cityCode=-&prefCode=${prefCode}`,
+    config,
+  ).then(async (res) => {
+    const data = await res.json();
+    if (res.ok) return data.result;
+    return Promise.reject(res);
+  });
+}
+
+export { getPrefectures, getPopulations };
