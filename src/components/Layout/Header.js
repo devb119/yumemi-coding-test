@@ -31,6 +31,11 @@ const Header = () => (
             Nav 4
           </a>
         </li>
+        <li>
+          <button type="button" className="cta-btn">
+            Try for free
+          </button>
+        </li>
       </ul>
     </nav>
   </header>
