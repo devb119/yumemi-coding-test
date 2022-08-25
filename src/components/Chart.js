@@ -13,16 +13,18 @@ import {
 import { getPrefectures } from '../commons/apis/services';
 import { useAsync } from '../commons/hooks/useAsync';
 import Spinner from './Spinner';
+import './style.css';
 
 const Chart = () => {
   //   const [selecedPrefectures, setSelectedPrefectures] = React.useState([]);
-  const { data, isIdle, isLoading, run } = useAsync();
+  const { data: prefData, isIdle, isLoading, run } = useAsync();
+  // const { data: populationData, isIdle: pIsIdle, pIsLoading, run: pRun } = useAsync();
 
   React.useEffect(() => {
     run(getPrefectures());
   }, [run]);
 
-  console.log(data);
+  console.log(prefData);
 
   const mockData = [
     {
@@ -74,7 +76,7 @@ const Chart = () => {
       {isIdle || isLoading ? (
         <Spinner />
       ) : (
-        <ResponsiveContainer width="100%" height={300}>
+        <ResponsiveContainer width="100%" height={400}>
           <LineChart
             data={mockData}
             margin={{ top: 5, right: 30, left: 20, bottom: 5 }}
@@ -83,9 +85,9 @@ const Chart = () => {
             <XAxis dataKey="name" />
             <YAxis />
             <Tooltip />
-            <Legend />
-            <Line type="monotone" dataKey="pv" stroke="#8884d8" />
-            <Line type="monotone" dataKey="uv" stroke="#82ca9d" />
+            <Legend onClick={(e) => console.log(e)} />
+            <Line strokeWidth={2} type="linear" dataKey="pv" stroke="#8884d8" />
+            <Line strokeWidth={2} type="linear" dataKey="uv" stroke="#82ca9d" />
           </LineChart>
         </ResponsiveContainer>
       )}
