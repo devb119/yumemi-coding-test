@@ -1,3 +1,5 @@
+/* eslint-disable react/jsx-curly-newline */
+/* eslint-disable implicit-arrow-linebreak */
 import './layout.css';
 
 const Header = () => (
@@ -38,6 +40,45 @@ const Header = () => (
         </li>
       </ul>
     </nav>
+
+    <button type="button" className="btn-mobile-nav">
+      <svg
+        xmlns="http://www.w3.org/2000/svg"
+        fill="none"
+        viewBox="0 0 24 24"
+        strokeWidth={1.5}
+        stroke="currentColor"
+        className="mobile-icon"
+        name="open"
+        onClick={() =>
+          document.getElementById('header').classList.add('nav-open')
+        }
+      >
+        <path
+          strokeLinecap="round"
+          strokeLinejoin="round"
+          d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5"
+        />
+      </svg>
+      <svg
+        xmlns="http://www.w3.org/2000/svg"
+        fill="none"
+        viewBox="0 0 24 24"
+        strokeWidth={1.5}
+        stroke="currentColor"
+        className="mobile-icon"
+        name="close"
+        onClick={() =>
+          document.getElementById('header').classList.remove('nav-open')
+        }
+      >
+        <path
+          strokeLinecap="round"
+          strokeLinejoin="round"
+          d="M4.5 19.5l15-15m-15 0l15 15"
+        />
+      </svg>
+    </button>
   </header>
 );
 

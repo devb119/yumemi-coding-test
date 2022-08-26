@@ -1,3 +1,3 @@
-const Footer = () => <div>Footer</div>;
+const Footer = () => <div> </div>;
 
 export default Footer;

@@ -11,3 +11,20 @@
 .guide {
   font-size: 2.4rem;
 }
+
+.check-boxes {
+  display: grid;
+  grid-template-columns: repeat(6, 1fr);
+}
+
+@media (max-width: 42.5em) {
+  .check-boxes {
+    grid-template-columns: repeat(4, 1fr);
+  }
+}
+
+@media (max-width: 34em) {
+  .check-boxes {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
