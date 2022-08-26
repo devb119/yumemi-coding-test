@@ -1,3 +1,4 @@
+/* eslint-disable react/jsx-wrap-multilines */
 /* eslint-disable object-curly-newline */
 import React from 'react';
 import {
@@ -10,13 +11,14 @@ import {
   Line,
   ResponsiveContainer,
 } from 'recharts';
+import { Typography, Checkbox, FormControlLabel } from '@mui/material';
 import { getPrefectures, getPopulations } from '../commons/apis/services';
 import { useAsync } from '../commons/hooks/useAsync';
 import Spinner from './Spinner';
-import { genRandomColors } from '../commons/utils';
+import { genRandomRGBColors, decreaseAlpha } from '../commons/utils';
 import './style.css';
 
-const randomColors = genRandomColors();
+const randomColors = genRandomRGBColors();
 
 const Chart = () => {
   //   const [selecedPrefectures, setSelectedPrefectures] = React.useState([]);
@@ -56,32 +58,56 @@ const Chart = () => {
     });
   }
 
-  const handleLegendClick = (e) => {
-    const key = e.dataKey.trim();
-    const selectedPrefsCopy = [...selectedPrefs];
-    // Remove if already exists in the array (toggle)
-    if (selectedPrefsCopy.includes(key)) {
-      const index = selectedPrefsCopy.indexOf(key);
-      selectedPrefsCopy.splice(index, 1);
-      // Else push to array
-    } else selectedPrefsCopy.push(key);
-    setSelectedPrefs(selectedPrefsCopy);
-  };
-
   return (
     <div className="chart-container">
       {isIdle || isLoading || !pop || !chartData ? (
         <Spinner />
       ) : (
         <>
-          <div className="guide">Click the legend to toggle data lines!</div>
+          <div className="guide">Check the boxes to show data!</div>
+          <div className="check-boxes">
+            {prefData.map((pref, i) => (
+              <FormControlLabel
+                key={pref.prefCode}
+                control={
+                  <Checkbox
+                    sx={{ '& .MuiSvgIcon-root': { fontSize: 28 } }}
+                    style={{ color: `${randomColors[i]}` }}
+                    onChange={(e) => {
+                      console.log(e);
+                      const key = pref.prefName;
+                      const selectedPrefsCopy = [...selectedPrefs];
+                      // Remove if already exists in the array (toggle)
+                      if (selectedPrefsCopy.includes(key)) {
+                        const index = selectedPrefsCopy.indexOf(key);
+                        selectedPrefsCopy.splice(index, 1);
+                        // Else push to array
+                      } else selectedPrefsCopy.push(key);
+                      setSelectedPrefs(selectedPrefsCopy);
+                    }}
+                  />
+                }
+                label={
+                  <Typography color={randomColors[i]} fontSize={18}>
+                    {pref.prefName}
+                  </Typography>
+                }
+              />
+            ))}
+          </div>
           <ResponsiveContainer width="100%" height={600}>
-            <LineChart data={chartData}>
+            <LineChart
+              data={chartData}
+              margin={{ top: 50, right: 50, left: 50, bottom: 50 }}
+            >
               <CartesianGrid strokeDasharray="3 3" />
-              <XAxis dataKey="year" />
-              <YAxis />
+              <XAxis
+                dataKey="year"
+                label={{ value: '年度', position: 'right' }}
+              />
+              <YAxis label={{ value: '人口数', position: 'top' }} />
               <Tooltip />
-              <Legend onClick={handleLegendClick} />
+              <Legend margin={50} />
               {prefData.map((pref, i) => (
                 <Line
                   strokeWidth={2}
@@ -92,7 +118,11 @@ const Chart = () => {
                       ? pref.prefName
                       : `${pref.prefName} `
                   }
-                  stroke={randomColors[i]}
+                  stroke={
+                    selectedPrefs.includes(pref.prefName)
+                      ? randomColors[i]
+                      : decreaseAlpha(randomColors[i])
+                  }
                 />
               ))}
             </LineChart>
