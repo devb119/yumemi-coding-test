@@ -7,4 +7,23 @@ function genRandomColors() {
   return randomColors;
 }
 
-export { genRandomColors };
+function genRandomRGBColors() {
+  const s = 255;
+  const randomColors = [];
+  // eslint-disable-next-line no-plusplus
+  for (let i = 0; i < 47; i++) {
+    const rgba = `rgba(${Math.round(Math.random() * s)}, ${Math.round(
+      Math.random() * s,
+    )}, ${Math.round(Math.random() * s)}, 1)`;
+    randomColors.push(rgba);
+  }
+  return randomColors;
+}
+
+function decreaseAlpha(rgba) {
+  const parts = rgba.match(/[\d.]+/g);
+  parts[3] = '0.3';
+  return `rgba(${parts.join(', ')})`;
+}
+
+export { genRandomColors, genRandomRGBColors, decreaseAlpha };
