@@ -73,8 +73,7 @@ const Chart = () => {
                   <Checkbox
                     sx={{ '& .MuiSvgIcon-root': { fontSize: 28 } }}
                     style={{ color: `${randomColors[i]}` }}
-                    onChange={(e) => {
-                      console.log(e);
+                    onChange={() => {
                       const key = pref.prefName;
                       const selectedPrefsCopy = [...selectedPrefs];
                       // Remove if already exists in the array (toggle)
