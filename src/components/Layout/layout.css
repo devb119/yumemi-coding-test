@@ -9,8 +9,20 @@
   margin-bottom: 6.4rem;
 }
 
+.logo-container {
+  display: flex;
+  gap: 1.6rem;
+  justify-content: center;
+  align-items: center;
+}
+
 .logo {
   width: 7rem;
+}
+
+.com-name {
+  font-size: 3.2rem;
+  font-weight: 700;
 }
 
 .main-nav-list {
@@ -72,7 +84,12 @@
   align-items: center;
 }
 
-@media (max-width: 42.5em) {
+.footer {
+  background-color: #e7f5ff;
+  height: 6.4rem;
+}
+
+@media (max-width: 61em) {
   .main-nav {
     background-color: rgba(255, 255, 255, 0.97);
     position: absolute;
@@ -129,10 +146,18 @@
   .logo {
     width: 6rem;
   }
+
+  .com-name {
+    font-size: 2.4rem;
+  }
 }
 
 @media (max-width: 34em) {
   .logo {
     width: 4rem;
+  }
+
+  .com-name {
+    font-size: 1.8rem;
   }
 }

@@ -4,13 +4,16 @@ import './layout.css';
 
 const Header = () => (
   <header id="header" className="header">
-    <a href="/">
-      <img
-        src="https://www.yumemi.co.jp/images/logo_yumemi_01.svg"
-        alt="yumemi logo"
-        className="logo"
-      />
-    </a>
+    <div className="logo-container">
+      <a href="/">
+        <img
+          src="https://www.yumemi.co.jp/images/logo_yumemi_01.svg"
+          alt="yumemi logo"
+          className="logo"
+        />
+      </a>
+      <p className="com-name">Yumemi Coding Test</p>
+    </div>
     <nav className="main-nav">
       <ul className="main-nav-list">
         <li>
