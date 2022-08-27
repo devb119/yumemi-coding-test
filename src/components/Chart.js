@@ -67,6 +67,7 @@ const Chart = () => {
       ) : (
         <>
           <div className="guide">Check the boxes to show data!</div>
+          <p className="guide">都道府県</p>
           <form className="check-boxes">
             {prefData.map((pref, i) => (
               <div key={pref.prefCode}>
