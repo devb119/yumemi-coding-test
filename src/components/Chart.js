@@ -1,3 +1,4 @@
+/* eslint-disable jsx-a11y/label-has-associated-control */
 /* eslint-disable react/jsx-wrap-multilines */
 /* eslint-disable object-curly-newline */
 import React from 'react';
@@ -11,7 +12,6 @@ import {
   Line,
   ResponsiveContainer,
 } from 'recharts';
-import { Typography, Checkbox, FormControlLabel } from '@mui/material';
 import { getPrefectures, getPopulations } from '../commons/apis/services';
 import { useAsync } from '../commons/hooks/useAsync';
 import Spinner from './Spinner';
@@ -65,35 +65,36 @@ const Chart = () => {
       ) : (
         <>
           <div className="guide">Check the boxes to show data!</div>
-          <div className="check-boxes">
+          <form className="check-boxes">
             {prefData.map((pref, i) => (
-              <FormControlLabel
-                key={pref.prefCode}
-                control={
-                  <Checkbox
-                    sx={{ '& .MuiSvgIcon-root': { fontSize: 28 } }}
-                    style={{ color: `${randomColors[i]}` }}
-                    onChange={() => {
-                      const key = pref.prefName;
-                      const selectedPrefsCopy = [...selectedPrefs];
-                      // Remove if already exists in the array (toggle)
-                      if (selectedPrefsCopy.includes(key)) {
-                        const index = selectedPrefsCopy.indexOf(key);
-                        selectedPrefsCopy.splice(index, 1);
-                        // Else push to array
-                      } else selectedPrefsCopy.push(key);
-                      setSelectedPrefs(selectedPrefsCopy);
-                    }}
-                  />
-                }
-                label={
-                  <Typography color={randomColors[i]} fontSize={18}>
-                    {pref.prefName}
-                  </Typography>
-                }
-              />
+              <div key={pref.prefCode}>
+                <input
+                  type="checkbox"
+                  id={pref.prefName}
+                  className="checkbox"
+                  checked={selectedPrefs.includes(pref.prefName)}
+                  style={{ accentColor: randomColors[i] }}
+                  onChange={() => {
+                    const key = pref.prefName;
+                    const selectedPrefsCopy = [...selectedPrefs];
+                    // Remove if already exists in the array (toggle)
+                    if (selectedPrefsCopy.includes(key)) {
+                      const index = selectedPrefsCopy.indexOf(key);
+                      selectedPrefsCopy.splice(index, 1);
+                      // Else push to array
+                    } else selectedPrefsCopy.push(key);
+                    setSelectedPrefs(selectedPrefsCopy);
+                  }}
+                />
+                <label
+                  htmlFor={pref.prefName}
+                  style={{ color: randomColors[i], fontSize: 18 }}
+                >
+                  {pref.prefName}
+                </label>
+              </div>
             ))}
-          </div>
+          </form>
           <ResponsiveContainer width="100%" height={600}>
             <LineChart
               data={chartData}
@@ -103,8 +104,12 @@ const Chart = () => {
               <XAxis
                 dataKey="year"
                 label={{ value: '年度', position: 'right' }}
+                style={{ fontSize: 10 }}
               />
-              <YAxis label={{ value: '人口数', position: 'top' }} />
+              <YAxis
+                style={{ fontSize: 10 }}
+                label={{ value: '人口数', position: 'top' }}
+              />
               <Tooltip />
               <Legend margin={50} />
               {prefData.map((pref, i) => (
