@@ -61,7 +61,9 @@ const Chart = () => {
   return (
     <div className="chart-container">
       {isIdle || isLoading || !pop || !chartData ? (
-        <Spinner />
+        <div className="center" style={{ height: '100vh' }}>
+          <Spinner />
+        </div>
       ) : (
         <>
           <div className="guide">Check the boxes to show data!</div>
