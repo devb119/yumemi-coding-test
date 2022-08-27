@@ -18,22 +18,22 @@ const Header = () => (
       <ul className="main-nav-list">
         <li>
           <a href="#header" className="main-nav-link">
-            Nav 1
+            How it works
           </a>
         </li>
         <li>
           <a href="#header" className="main-nav-link">
-            Nav 2
+            Populations
           </a>
         </li>
         <li>
           <a href="#header" className="main-nav-link">
-            Nav 3
+            Cities
           </a>
         </li>
         <li>
           <a href="#header" className="main-nav-link">
-            Nav 4
+            About me
           </a>
         </li>
         <li>
